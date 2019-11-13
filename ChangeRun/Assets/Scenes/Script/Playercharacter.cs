@@ -14,12 +14,14 @@ public class Playercharacter : MonoBehaviour
     Rigidbody rigid;//获取人物刚体
     Renderer render;//获取人物渲染
     Animator ani;//获取动画
-    Collision collisionRet;//获取碰撞器
+    Collision collisionRet;//获取碰撞物体
     TransColor colorCurrent;//人物现在的颜色
 
-    public float speed;
-    public float firstjump;
-    public float secondjump;
+    public float speed;//人物速度
+    public float firstjump;//一段跳
+    public float secondjump;//二段跳
+    public float SpeedUp;//加速度
+    
     public bool isAlive;//判断是否死亡
 
 
@@ -29,8 +31,9 @@ public class Playercharacter : MonoBehaviour
     public AudioClip jumpClip;//跳跃音效
     public AudioClip transClip;//变色音效
 
-    int jumpcount = 0;
-    bool isGround;
+    int jumpcount = 0;//记录跳跃次数
+    bool isGround;//地面检测
+    float StartSpeed;//初始速度
 
     private void Awake()
     {
@@ -46,11 +49,13 @@ public class Playercharacter : MonoBehaviour
         particleDie.Stop();//死亡动画初始为停止
 
         isAlive = true;
+        StartSpeed = speed;
     }
 
     private void FixedUpdate()
     {
         if (!isAlive) return;
+        Debug.Log(rigid.velocity.z);
         if (collisionRet != null)//碰撞结果不为空
         {
             if (collisionRet.gameObject.CompareTag("Red"))//碰到红色物体
@@ -73,7 +78,7 @@ public class Playercharacter : MonoBehaviour
             }
         }
 
-        if (transform.position.y < -15)
+        if (transform.position.y < -20)
         {
             Die();
         }
@@ -92,11 +97,26 @@ public class Playercharacter : MonoBehaviour
 
    
             ani.SetBool("isGround", isGround);
-  
+
+        if (rigid.velocity.z > 25)//加速的最大值
+        {
+            SpeedUp = -3;
+            firstjump = 16;
+            secondjump = 16;
+        }
+        
+        if (rigid.velocity.z < StartSpeed)//减速到原来的速度
+        {
+            SpeedUp = 0;
+            firstjump = 12;
+            secondjump = 12;
+        }
     }
     public void Move()//人物移动
     {
         if (!isAlive) return;
+        
+        speed += SpeedUp * Time.deltaTime;
         var vel = rigid.velocity;//获取人物速度
         vel.z = (Vector3.forward * speed).z;//只让人物向前移动，z轴
         rigid.velocity = vel;
@@ -119,13 +139,15 @@ public class Playercharacter : MonoBehaviour
                 
             }
             jumpcount++;
+            ani.SetBool("isFalling", false);
         }
+        
     }
 
     public void Gravity()//没有长按跳跃键，增加下坠的重力
     {
-        rigid.AddForce(Vector3.down * 1f, ForceMode.Impulse);
-
+        rigid.AddForce(Vector3.down * 0.5f, ForceMode.Impulse);
+        ani.SetBool("isFalling", true);
     }
 
     public bool GroundCheck()//地面检测
@@ -198,7 +220,7 @@ public class Playercharacter : MonoBehaviour
     private void OnCollisionEnter(Collision collision)//如果与物体相碰，就会刷新二段跳
     {
         jumpcount = 0;
-        collisionRet = collision;
+        collisionRet = collision;//获取碰撞的物体
     }
 
     private void OnCollisionStay(Collision collision)
@@ -209,6 +231,16 @@ public class Playercharacter : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         collisionRet = null;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+        if (other.CompareTag("Speed up"))//如果穿过加速道具，加速
+        {
+            SpeedUp = 15;
+ 
+        }
     }
 }
 

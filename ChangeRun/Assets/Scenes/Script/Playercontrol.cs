@@ -40,8 +40,9 @@ public class Playercontrol : MonoBehaviour
             jump = Input.GetKeyDown(KeyCode.UpArrow);
             transColor = Input.GetKeyDown(KeyCode.Space);
         }
-
+        
         character.Move();
+        
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {

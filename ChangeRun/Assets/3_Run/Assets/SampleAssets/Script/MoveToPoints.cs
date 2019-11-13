@@ -47,7 +47,7 @@ public class MoveToPoints : MonoBehaviour
     {
         if (!arrived)
         {
-            Vector3 direction = (waypoints[waypointCurrent].position - transform.position).normalized;
+            Vector3 direction = (waypoints[waypointCurrent].position - transform.position).normalized ;
             rigid.MovePosition(transform.position + (direction * speed * Time.fixedDeltaTime));
         }
     }
