@@ -55,7 +55,6 @@ public class Playercharacter : MonoBehaviour
     private void FixedUpdate()
     {
         if (!isAlive) return;
-        Debug.Log(rigid.velocity.z);
         if (collisionRet != null)//碰撞结果不为空
         {
             if (collisionRet.gameObject.CompareTag("Red"))//碰到红色物体
@@ -94,8 +93,6 @@ public class Playercharacter : MonoBehaviour
             particleRed.gameObject.SetActive(false);
             particleGreen.gameObject.SetActive(false);
         }
-
-   
             ani.SetBool("isGround", isGround);
 
         if (rigid.velocity.z > 25)//加速的最大值
@@ -221,6 +218,10 @@ public class Playercharacter : MonoBehaviour
     {
         jumpcount = 0;
         collisionRet = collision;//获取碰撞的物体
+        if (collision.gameObject.name == "Winner")
+        {
+            rigid.velocity = new Vector3(0, 0, 0);
+        }
     }
 
     private void OnCollisionStay(Collision collision)

@@ -9,6 +9,7 @@ TagManager:
   - Green
   - Waypoint
   - Speed up
+  - Winner
   layers:
   - Default
   - TransparentFX
