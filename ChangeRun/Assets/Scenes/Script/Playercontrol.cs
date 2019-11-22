@@ -14,32 +14,9 @@ public class Playercontrol : MonoBehaviour
     void Update()
     {
         if (!character.isAlive) return;
-        bool jump;
-        bool transColor;
+ 
 
-        if (Application.isMobilePlatform)
-        {
-            jump = false;
-            transColor = false;
-            var touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
-            {
-
-                if (touch.position.x > (Screen.width / 2))
-                {
-                    jump = true;
-                }
-                else
-                {
-                    transColor = true;
-                }
-            }
-        }
-        else
-        {
-            jump = Input.GetKeyDown(KeyCode.UpArrow);
-            transColor = Input.GetKeyDown(KeyCode.Space);
-        }
+    
         
         character.Move();
         
@@ -53,7 +30,7 @@ public class Playercontrol : MonoBehaviour
             character.Gravity();
         }
 
-        if (transColor)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             character.ChangeColor();
         }

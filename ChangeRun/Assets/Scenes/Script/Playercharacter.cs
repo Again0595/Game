@@ -21,6 +21,7 @@ public class Playercharacter : MonoBehaviour
     public float firstjump;//一段跳
     public float secondjump;//二段跳
     public float SpeedUp;//加速度
+    public string GameName; 
     
     public bool isAlive;//判断是否死亡
 
@@ -30,6 +31,7 @@ public class Playercharacter : MonoBehaviour
     public ParticleSystem particleDie;//死亡动画
     public AudioClip jumpClip;//跳跃音效
     public AudioClip transClip;//变色音效
+    public AudioClip dieClip;//死亡音效
 
     int jumpcount = 0;//记录跳跃次数
     bool isGround;//地面检测
@@ -50,6 +52,8 @@ public class Playercharacter : MonoBehaviour
 
         isAlive = true;
         StartSpeed = speed;
+
+
     }
 
     private void FixedUpdate()
@@ -95,7 +99,7 @@ public class Playercharacter : MonoBehaviour
         }
             ani.SetBool("isGround", isGround);
 
-        if (rigid.velocity.z > 25)//加速的最大值
+        if (rigid.velocity.z > 18)//加速的最大值
         {
             SpeedUp = -3;
             firstjump = 16;
@@ -128,12 +132,13 @@ public class Playercharacter : MonoBehaviour
             {
                 rigid.velocity = new Vector3(rigid.velocity.x,0, rigid.velocity.z);
                 rigid.AddForce(Vector3.up * firstjump, ForceMode.Impulse);
+                AudioSource.PlayClipAtPoint(jumpClip, transform.position);
             }
             else if (jumpcount == 1 || isGround)
             {
                 rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
                 rigid.AddForce(Vector3.up * secondjump, ForceMode.Impulse);
-                
+                AudioSource.PlayClipAtPoint(jumpClip, transform.position);
             }
             jumpcount++;
             ani.SetBool("isFalling", false);
@@ -169,12 +174,13 @@ public class Playercharacter : MonoBehaviour
         particleRed.Stop();
         particleGreen.Stop();
         particleDie.Play();
+        AudioSource.PlayClipAtPoint(dieClip, transform.position);
         Invoke("ReStart", 0.5f);//调用重启函数，隔1秒重启游戏
     }
 
     public void ReStart()//重启游戏
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("ChangeRun");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(GameName);
     }
 
     public void ChangeColor()//人物变色
