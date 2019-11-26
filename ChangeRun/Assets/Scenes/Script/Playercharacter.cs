@@ -147,9 +147,10 @@ public class Playercharacter : MonoBehaviour
     }
 
     public void Gravity()//没有长按跳跃键，增加下坠的重力
-    {
-        rigid.AddForce(Vector3.down * 0.5f, ForceMode.Impulse);
-        ani.SetBool("isFalling", true);
+    { 
+            rigid.AddForce(Vector3.down * 0.5f, ForceMode.Impulse);
+            ani.SetBool("isFalling", true);
+        
     }
 
     public bool GroundCheck()//地面检测

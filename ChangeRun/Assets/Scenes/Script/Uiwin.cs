@@ -41,7 +41,9 @@ public class Uiwin : MonoBehaviour
 
     void Nextchick()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(GameName);
+        gameui.enabled = false;
         Time.timeScale = 1;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(GameName);
+
     }
 }

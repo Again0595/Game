@@ -8,23 +8,25 @@ public class UiGame : MonoBehaviour
 {
     public bool IsGamePaused;//游戏暂停条件
     public Canvas gameui;//游戏ui
+    public Canvas Stop;//游戏ui
     public AudioSource back;//背景音乐
     public AudioSource Jump;//跳跃音效
     public AudioSource Tran;//变颜色音效
     public AudioSource Die;//跳跃音效
     public Button re;//开始按钮
     public Button exit;//退出按钮
+    public Button stop;//暂停
     public Slider slider;//背景音乐滑动条
     public Slider slider2;//音效滑动条
     float t;//记录音乐的暂停时间
     //CanvasGroup canvasgroup;
     void Start()
     {
-        //canvasgroup = GetComponentInChildren<CanvasGroup>();
         gameui.enabled = false;
 
         exit.onClick.AddListener(Exitchick);
         re.onClick.AddListener(StartGame);
+        stop.onClick.AddListener(PauseGame);
     }
 
     // Update is called once per frame
@@ -50,6 +52,7 @@ public class UiGame : MonoBehaviour
         IsGamePaused = false;
         Time.timeScale = 1;
         gameui.enabled = false;//ui开始关闭
+        Stop.enabled = true;//ui开始开启
         back.time = t;
         back.Play();
         //canvasgroup.alpha = 0;
@@ -59,6 +62,7 @@ public class UiGame : MonoBehaviour
     void PauseGame()
     {
         IsGamePaused = true;
+        Stop.enabled = false;//ui开始关闭
         Time.timeScale = 0;
         gameui.enabled = true;//开启ui
         t = back.time;
@@ -74,5 +78,5 @@ public class UiGame : MonoBehaviour
         Time.timeScale = 1;
     }
 
- 
+
 }
