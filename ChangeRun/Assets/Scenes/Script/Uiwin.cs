@@ -35,15 +35,17 @@ public class Uiwin : MonoBehaviour
     }
     void Exitchick()
     {
+        gameui.enabled = false;
         UnityEngine.SceneManagement.SceneManager.LoadScene("Start");
         Time.timeScale = 1;
     }
 
     void Nextchick()
     {
-        gameui.enabled = false;
+        
         Time.timeScale = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene(GameName);
+        gameui.enabled = false;
 
     }
 }
